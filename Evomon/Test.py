@@ -344,7 +344,7 @@ while running:
                         schaden2, _ = gegner.angreifen(Evoli, gegner_atk)
                         print(f"{gegner.name} nutzt {gegner_atk.name}! ({schaden2} Schaden)")
                         if Evoli.kp <= 0:
-                            print("💀 Evoli wurde besiegt! Spiel vorbei.")
+                            print("💀 {Evoli.name} wurde besiegt! Spiel vorbei.")
                             running = False
 
     # Textanzeige
@@ -405,4 +405,5 @@ while running:
     clock.tick(60)
 
 pygame.quit()
+
 
