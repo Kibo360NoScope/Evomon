@@ -19,9 +19,11 @@ Sehr_Effektiv = 11
 fenster_breite = 1080
 fenster_hoehe = 720
 
+
 # Positioneneinstellungen
 spieler_pos_bild = (150, 200)  # links oben
 gegner_pos_bild = (730, 200)   # Rechts unten
+hintergrund_pos_bild = (0,0)
 
 spieler_pos_text_oben = (spieler_pos_bild[0] + 0, spieler_pos_bild[1] - 24) #
 gegner_pos_text_oben = (gegner_pos_bild[0] + 0, gegner_pos_bild[1] - 24)
@@ -34,6 +36,9 @@ gegner_pos_kp_balken_y = gegner_pos_bild[1] + 0
 
 spieler_pos_text_kp = (spieler_pos_kp_balken_x, spieler_pos_kp_balken_y + 1)
 gegner_pos_text_kp = (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y + 1)
+
+kp_tod_pokemon = 0
+ep_tod_gegner= 40
 
 #pygame setup
 pygame.init()
@@ -77,14 +82,14 @@ def effekt_faktor(angreifer_typ, verteidiger_typ):
 
 
 # --- Klassen ---
-class attacke:
+class Attacke:
     def __init__(self, name, schaden, typ):
         self.name = name
         self.schaden = schaden
         self.typ = typ
 
 
-class pokemon:
+class Pokemon:
     def __init__(self, name, typ, maxkp, ep, lvl, attacken, bilddatei):
         self.name = name
         self.typ = typ
@@ -129,42 +134,42 @@ class pokemon:
         entwicklungen = {
             "Flamara": {
                 "typ": Feuer,
-                "attacken": [attacke("Flammenwurf", 12, Feuer), attacke("Glut", 10, Feuer)],
+                "attacken": [Attacke("Flammenwurf", 12, Feuer), Attacke("Glut", 10, Feuer)],
                 "bild": "graphics/Pokemon/Flamara.png"
             },
             "Aquana": {
                 "typ": Wasser,
-                "attacken": [attacke("Aquaknarre", 12, Wasser), attacke("Hydropumpe", 10, Wasser)],
+                "attacken": [Attacke("Aquaknarre", 12, Wasser), Attacke("Hydropumpe", 10, Wasser)],
                 "bild": "graphics/Pokemon/Aquana.png"
             },
             "Blitza": {
                 "typ": Elektro,
-                "attacken": [attacke("Donnerschock", 12, Elektro), attacke("Ladungsstoss", 10, Elektro)],
+                "attacken": [Attacke("Donnerschock", 12, Elektro), Attacke("Ladungsstoss", 10, Elektro)],
                 "bild": "graphics/Pokemon/Blitza.png"
             },
             "Psiana": {
                 "typ": Psycho,
-                "attacken": [attacke("Konfusion", 10, Psycho), attacke("Psychokinese", 12, Psycho)],
+                "attacken": [Attacke("Konfusion", 10, Psycho), Attacke("Psychokinese", 12, Psycho)],
                 "bild": "graphics/Pokemon/Psiana.png"
             },
             "Nachtara": {
                 "typ": Unlicht,
-                "attacken": [attacke("Finsteraura", 10, Unlicht), attacke("Biss", 12, Unlicht)],
+                "attacken": [Attacke("Finsteraura", 10, Unlicht), Attacke("Biss", 12, Unlicht)],
                 "bild": "graphics/Pokemon/Nachtara.png"
             },
             "Glaziola": {
                 "typ": Eis,
-                "attacken": [attacke("Blizzard", 10, Eis), attacke("Eiszahn", 12, Eis)],
+                "attacken": [Attacke("Blizzard", 10, Eis), Attacke("Eiszahn", 12, Eis)],
                 "bild": "graphics/Pokemon/Glaziola.png"
             },
             "Folipurba": {
                 "typ": Pflanze,
-                "attacken": [attacke("Laubklinge", 12, Pflanze), attacke("Rasierblatt", 10, Pflanze)],
+                "attacken": [Attacke("Laubklinge", 12, Pflanze), Attacke("Rasierblatt", 10, Pflanze)],
                 "bild": "graphics/Pokemon/Folipurba.png"
             },
             "Feelinara": {
                 "typ": Fee,
-                "attacken": [attacke("Mondgewalt", 12, Fee), attacke("Säuselstimme", 10, Fee)],
+                "attacken": [Attacke("Mondgewalt", 12, Fee), Attacke("Säuselstimme", 10, Fee)],
                 "bild": "graphics/Pokemon/Feelinara.png"
             }
         }
@@ -189,61 +194,61 @@ class pokemon:
         self.kp = self.maxkp
 
 
-class Aquana(pokemon):
+class Aquana(Pokemon):
     def __init__(self, name, typ, maxkp, ep, lvl, attacken):
         super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Aquana.png")
 
-class Flamara(pokemon):
+class Flamara(Pokemon):
     def __init__(self, name, typ, maxkp, ep, lvl, attacken):
         super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Flamara.png")
 
-class Blitza(pokemon):
+class Blitza(Pokemon):
     def __init__(self, name, typ, maxkp, ep, lvl, attacken):
         super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Blitza.png")
 
-class Folipurba(pokemon):
+class Folipurba(Pokemon):
     def __init__(self, name, typ, maxkp, ep, lvl, attacken):
         super().__init__(name, typ, maxkp, ep, lvl, attacken,"graphics/Pokemon/Folipurba.png")
 
-class Glaziola(pokemon):
+class Glaziola(Pokemon):
     def __init__(self, name, typ, maxkp, ep, lvl, attacken):
         super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Glaziola.png")
 
-class Nachtara (pokemon):
+class Nachtara (Pokemon):
     def __init__(self, name, typ, maxkp, ep, lvl, attacken):
         super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Nachtara.png")
 
-class Feelinara (pokemon):
+class Feelinara (Pokemon):
     def __init__(self, name, typ, maxkp, ep, lvl, attacken):
         super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Feelinara.png")
 
-class Psiana (pokemon):
+class Psiana (Pokemon):
     def __init__(self, name, typ, maxkp, ep, lvl, attacken):
         super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Psiana.png")
 
-class Evoli (pokemon):
+class Evoli (Pokemon):
     def __init__(self, name, typ, maxkp, ep, lvl, attacken):
         super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Evoli.png")
 
     # --- Attacken definieren ---
-tackle = attacke("Tackle", 10, Normal)
-bodycheck = attacke("Bodycheck", 12, Normal)
-biss = attacke("Biss", 12, Unlicht)
-finsteraura = attacke("Finsteraura", 10, Unlicht)
-aquaknarre = attacke("Aquaknarre", 12, Wasser)
-hydropumpe = attacke("Hydropumpe", 10, Wasser)
-glut = attacke("Glut", 10, Feuer)
-flammenwurf = attacke("Flammenwurf", 12, Feuer)
-ladungsstoss = attacke("Ladungsstoss", 10, Elektro)
-donnerzahn = attacke("Donnerschock", 12, Elektro)
-rasierblatt = attacke("Rasierblatt", 10, Pflanze)
-laubklinge = attacke("Laubklinge", 12, Pflanze)
-säuselstimme = attacke("Säuselstimme", 10, Fee)
-mondgewalt = attacke("Mondgewalt", 12, Fee)
-eiszahn = attacke("Eiszahn", 12, Eis)
-blizzard = attacke("Blizzard", 10, Eis)
-konfusion = attacke("Konfusion", 12, Psycho)
-psychokinese = attacke("Psychokinese", 10, Psycho)
+tackle = Attacke("Tackle", 10, Normal)
+bodycheck = Attacke("Bodycheck", 12, Normal)
+biss = Attacke("Biss", 12, Unlicht)
+finsteraura = Attacke("Finsteraura", 10, Unlicht)
+aquaknarre = Attacke("Aquaknarre", 12, Wasser)
+hydropumpe = Attacke("Hydropumpe", 10, Wasser)
+glut = Attacke("Glut", 10, Feuer)
+flammenwurf = Attacke("Flammenwurf", 12, Feuer)
+ladungsstoss = Attacke("Ladungsstoss", 10, Elektro)
+donnerzahn = Attacke("Donnerschock", 12, Elektro)
+rasierblatt = Attacke("Rasierblatt", 10, Pflanze)
+laubklinge = Attacke("Laubklinge", 12, Pflanze)
+säuselstimme = Attacke("Säuselstimme", 10, Fee)
+mondgewalt = Attacke("Mondgewalt", 12, Fee)
+eiszahn = Attacke("Eiszahn", 12, Eis)
+blizzard = Attacke("Blizzard", 10, Eis)
+konfusion = Attacke("Konfusion", 12, Psycho)
+psychokinese = Attacke("Psychokinese", 10, Psycho)
 
 # --- Gegnerliste (Basiswerte) ---
 GEGNER_LISTE = [
@@ -259,7 +264,7 @@ GEGNER_LISTE = [
 ]
 
 # --- Spieler ---
-Evoli = pokemon("Evoli", Normal, 24, 0, 1, [bodycheck, tackle], "graphics/Pokemon/Evoli.png")
+Evoli = Pokemon("Evoli", Normal, 24, 0, 1, [bodycheck, tackle], "graphics/Pokemon/Evoli.png")
 
 
 # --- Gegner erzeugen, angepasst an Evoli ---
@@ -269,7 +274,7 @@ def gegner_generieren(evoli_lvl):
 
     gegner_klasse = type(basis_gegner)
 
-    gegner_attacken = [attacke(atk.name, atk.schaden, atk.typ) for atk in basis_gegner.attacken]
+    gegner_attacken = [Attacke(atk.name, atk.schaden, atk.typ) for atk in basis_gegner.attacken]
 
     gegner = gegner_klasse(
         basis_gegner.name,
@@ -321,7 +326,7 @@ def draw_button(screen, text, x, y, w, h, mouse_pos):
 gegner = gegner_generieren(Evoli.lvl)
 while running:
     # Bildhintergrund hinzufügen
-    screen.blit(hintergrund_bild, (0, 0))
+    screen.blit(hintergrund_bild, hintergrund_pos_bild)
     # Pokemon-Bilder anzeigen
     screen.blit(Evoli.bilddatei, spieler_pos_bild)
     screen.blit(gegner.bilddatei, gegner_pos_bild)
@@ -337,9 +342,9 @@ while running:
                     atk = Evoli.attacken[i]
                     schaden, faktor = Evoli.angreifen(gegner, atk)
                     print(f"{Evoli.name} nutzt {atk.name}! ({schaden} Schaden)")
-                    if gegner.kp <= 0:
+                    if gegner.kp <= kp_tod_pokemon:
                         print(f"{gegner.name} wurde besiegt!")
-                        Evoli.erhalte_ep(40)
+                        Evoli.erhalte_ep(ep_tod_gegner)
                         Evoli.heilen()
                         gegner = gegner_generieren(Evoli.lvl)
                         break
@@ -347,7 +352,7 @@ while running:
                         gegner_atk = random.choice(gegner.attacken)
                         schaden2, _ = gegner.angreifen(Evoli, gegner_atk)
                         print(f"{gegner.name} nutzt {gegner_atk.name}! ({schaden2} Schaden)")
-                        if Evoli.kp <= 0:
+                        if Evoli.kp <= kp_tod_pokemon:
                             print(f"💀 {Evoli.name} wurde besiegt! Spiel vorbei.")
                             running = False
 
