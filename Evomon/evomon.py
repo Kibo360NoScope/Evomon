@@ -1,6 +1,6 @@
 import random
 import pygame
-# --- Typen-Konstanten ---
+# --- Typen/Konstanten ---
 Normal = 0
 Feuer = 1
 Wasser = 2
@@ -14,6 +14,8 @@ Fee = 8
 Neutral = 9
 Nicht_sehr_Effektiv = 10
 Sehr_Effektiv = 11
+
+Money = 0
 
 # Fenstereinstellungen
 fenster_breite = 1080
@@ -85,7 +87,7 @@ class attacke:
 
 
 class pokemon:
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken, bilddatei):
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken, bilddatei, money):
         self.name = name
         self.typ = typ
         self.maxkp = maxkp
@@ -94,9 +96,15 @@ class pokemon:
         self.lvl = lvl
         self.attacken = attacken
         self.entwickelt = False
+        self.money = money
 
         self.bilddatei = pygame.image.load(bilddatei)#.convert_alpha()
         self.bilddatei = pygame.transform.scale(self.bilddatei, (200, 200))
+
+    def erhalte_geld(self, menge):
+        self.money += menge
+        if gegner.kp == 0:
+            self.money += 100
 
 
     def angreifen(self, ziel, attacke):
@@ -342,6 +350,7 @@ while running:
                         Evoli.erhalte_ep(40)
                         Evoli.heilen()
                         gegner = gegner_generieren(Evoli.lvl)
+                        Evoli.erhalte_geld(100)
                         break
                     else:
                         gegner_atk = random.choice(gegner.attacken)
