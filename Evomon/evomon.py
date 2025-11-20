@@ -40,6 +40,30 @@ gegner_pos_text_kp = (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y + 1)
 kp_tod_pokemon = 0
 ep_tod_gegner= 40
 
+# Button
+# === Positionseinstellungen ===
+button_width = 238
+button_height = 50
+
+# obere Buttons (Standardattacken)
+oben_y = 569  # Höhe etwas über "Last Subscriber" und "Last Bits"
+links_oben_x = 288
+rechts_oben_x = 556
+
+# untere Buttons (neue Attacken)
+unten_y = 648.7  # Höhe etwas über "Last Follower" und "Last Bits"
+links_unten_x = 21
+rechts_unten_x = 824
+
+# Farben
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+LIGHT_GREY = (200, 200, 200)
+HOVER = (255, 220, 120)
+GREEN = (80, 200, 80)
+RED = (230, 80, 80)
+LIGHT_BLUE = (106, 171, 237)
+
 #pygame setup
 pygame.init()
 screen = pygame.display.set_mode((fenster_breite, fenster_hoehe))  # Fenstereinstellung
@@ -104,9 +128,9 @@ class Pokemon:
         self.bilddatei = pygame.transform.scale(self.bilddatei, (200, 200))
 
 
-    def angreifen(self, ziel, attacke):
-        faktor = effekt_faktor(attacke.typ, ziel.typ)
-        schaden = int(attacke.schaden * faktor)
+    def angreifen(self, ziel, Attacke):
+        faktor = effekt_faktor(Attacke.typ, ziel.typ)
+        schaden = int(Attacke.schaden * faktor)
         ziel.kp = max(ziel.kp - schaden, 0)
         return schaden, faktor
 
@@ -301,15 +325,6 @@ def gegner_generieren(evoli_lvl):
 
 
 
-# Farben
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-LIGHT_GREY = (200, 200, 200)
-HOVER = (255, 220, 120)
-GREEN = (80, 200, 80)
-RED = (230, 80, 80)
-LIGHT_BLUE = (106, 171, 237)
-
 # --- Button zeichnen ---
 def draw_button(screen, text, x, y, w, h, mouse_pos):
     rect = pygame.Rect(x, y, w, h)
@@ -379,20 +394,6 @@ while running:
     # --- Buttons für Attacken ---
     button_rects = []
 
-    # === Positionseinstellungen ===
-    button_width = 238
-    button_height = 50
-
-    # obere Buttons (Standardattacken)
-    oben_y = 569  # Höhe etwas über "Last Subscriber" und "Last Bits"
-    links_oben_x = 288
-    rechts_oben_x = 556
-
-    # untere Buttons (neue Attacken)
-    unten_y = 648.7 # Höhe etwas über "Last Follower" und "Last Bits"
-    links_unten_x = 21
-    rechts_unten_x = 824
-
     # --- Buttons zeichnen ---
     for i, atk in enumerate(Evoli.attacken[:4]):
         if i == 0:
@@ -404,7 +405,6 @@ while running:
         elif i == 3:
             x, y = rechts_unten_x, unten_y
         else:
-            # Falls du mehr als 4 Attacken anzeigen willst, einfach hier erweitern
             x, y = 400, 700
 
         rect = draw_button(screen, atk.name, x, y, button_width, button_height, mouse_pos)
