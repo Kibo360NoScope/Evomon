@@ -60,6 +60,10 @@ effektiv = [
     [9, 10, 10, 11, 9, 9, 9, 10, 9],
     [9, 9, 9, 9, 9, 11, 9, 9, 9]
 ]
+#Scaling werte
+scaling_evolidmg = 1.12
+scaling_kp = 0.1
+scaling_enmydmg = 0.03
 
 
 def effekt_faktor(angreifer_typ, verteidiger_typ):
@@ -116,7 +120,7 @@ class pokemon:
 
         # Attackenschaden leicht erhöhen
         for atk in self.attacken:
-            atk.schaden = atk.schaden * 1.12
+            atk.schaden = atk.schaden * scaling_evolidmg
 
         if self.lvl == 15 and not self.entwickelt:
             self.entwickeln()
@@ -279,8 +283,8 @@ def gegner_generieren(evoli_lvl):
 
 
     # Schwächere Skalierung
-    kp_faktor = 1 + (gegner.lvl - 5) * 0.1
-    atk_faktor = 1+  (gegner.lvl - 5) * 0.03
+    kp_faktor = 1 + (gegner.lvl - 5) * scaling_kp
+    atk_faktor = 1+  (gegner.lvl - 5) * scaling_enmydmg
 
     gegner.maxkp = int(basis_gegner.maxkp * kp_faktor)
     gegner.kp = gegner.maxkp
@@ -344,7 +348,7 @@ while running:
                         schaden2, _ = gegner.angreifen(Evoli, gegner_atk)
                         print(f"{gegner.name} nutzt {gegner_atk.name}! ({schaden2} Schaden)")
                         if Evoli.kp <= 0:
-                            print("💀 {Evoli.name} wurde besiegt! Spiel vorbei.")
+                            print(f"💀 {Evoli.name} wurde besiegt! Spiel vorbei.")
                             running = False
 
     # Textanzeige
