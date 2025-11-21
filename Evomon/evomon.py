@@ -114,7 +114,7 @@ class Attacke:
 
 
 class Pokemon:
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken, bilddatei):
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken, bilddatei, money):
         self.name = name
         self.typ = typ
         self.maxkp = maxkp
@@ -123,6 +123,7 @@ class Pokemon:
         self.lvl = lvl
         self.attacken = attacken
         self.entwickelt = False
+        self.money = money
 
         self.bilddatei = pygame.image.load(bilddatei)#.convert_alpha()
         self.bilddatei = pygame.transform.scale(self.bilddatei, (200, 200))
@@ -219,40 +220,40 @@ class Pokemon:
 
 
 class Aquana(Pokemon):
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken):
-        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Aquana.png")
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken, money):
+        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Aquana.png", 0)
 
 class Flamara(Pokemon):
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken):
-        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Flamara.png")
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken, money):
+        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Flamara.png", 0)
 
 class Blitza(Pokemon):
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken):
-        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Blitza.png")
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken, money):
+        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Blitza.png",0)
 
 class Folipurba(Pokemon):
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken):
-        super().__init__(name, typ, maxkp, ep, lvl, attacken,"graphics/Pokemon/Folipurba.png")
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken, money):
+        super().__init__(name, typ, maxkp, ep, lvl, attacken,"graphics/Pokemon/Folipurba.png",0)
 
 class Glaziola(Pokemon):
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken):
-        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Glaziola.png")
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken,money):
+        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Glaziola.png",0)
 
 class Nachtara (Pokemon):
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken):
-        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Nachtara.png")
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken,money):
+        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Nachtara.png",0)
 
 class Feelinara (Pokemon):
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken):
-        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Feelinara.png")
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken,money):
+        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Feelinara.png",0)
 
 class Psiana (Pokemon):
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken):
-        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Psiana.png")
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken,money):
+        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Psiana.png",0)
 
 class Evoli (Pokemon):
-    def __init__(self, name, typ, maxkp, ep, lvl, attacken):
-        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Evoli.png")
+    def __init__(self, name, typ, maxkp, ep, lvl, attacken,money):
+        super().__init__(name, typ, maxkp, ep, lvl, attacken, "graphics/Pokemon/Evoli.png",0)
 
     # --- Attacken definieren ---
 tackle = Attacke("Tackle", 10, Normal)
@@ -276,19 +277,19 @@ psychokinese = Attacke("Psychokinese", 10, Psycho)
 
 # --- Gegnerliste (Basiswerte) ---
 GEGNER_LISTE = [
-    Aquana("Aquana", Wasser, 28, 0, 1, [hydropumpe, aquaknarre, bodycheck, tackle]),
-    Flamara("Flamara", Feuer, 26, 0, 1, [flammenwurf, glut, bodycheck, tackle]),
-    Blitza("Blitza", Elektro, 26, 0, 1, [donnerzahn, ladungsstoss, bodycheck, tackle]),
-    Folipurba("Folipurba", Pflanze, 26, 0, 1, [laubklinge, rasierblatt, bodycheck, tackle]),
-    Glaziola("Glaziola", Eis, 26, 0, 1, [blizzard, eiszahn, bodycheck, tackle]),
-    Nachtara("Nachtara", Unlicht, 26, 0, 1, [finsteraura, biss, bodycheck, tackle]),
-    Feelinara("Feelinara", Fee, 26, 0, 1, [mondgewalt, säuselstimme, bodycheck, tackle]),
-    Psiana("Psiana", Psycho, 26, 0, 1, [psychokinese, konfusion, bodycheck, tackle]),
-    Evoli("Evoli", Normal, 24, 0, 1, [bodycheck, tackle]),
+    Aquana("Aquana", Wasser, 28, 0, 1, [hydropumpe, aquaknarre, bodycheck, tackle],0),
+    Flamara("Flamara", Feuer, 26, 0, 1, [flammenwurf, glut, bodycheck, tackle],0),
+    Blitza("Blitza", Elektro, 26, 0, 1, [donnerzahn, ladungsstoss, bodycheck, tackle],0),
+    Folipurba("Folipurba", Pflanze, 26, 0, 1, [laubklinge, rasierblatt, bodycheck, tackle],0),
+    Glaziola("Glaziola", Eis, 26, 0, 1, [blizzard, eiszahn, bodycheck, tackle],0),
+    Nachtara("Nachtara", Unlicht, 26, 0, 1, [finsteraura, biss, bodycheck, tackle],0),
+    Feelinara("Feelinara", Fee, 26, 0, 1, [mondgewalt, säuselstimme, bodycheck, tackle],0),
+    Psiana("Psiana", Psycho, 26, 0, 1, [psychokinese, konfusion, bodycheck, tackle],0),
+    Evoli("Evoli", Normal, 24, 0, 1, [bodycheck, tackle],0),
 ]
 
 # --- Spieler ---
-Evoli = Pokemon("Evoli", Normal, 24, 0, 1, [bodycheck, tackle], "graphics/Pokemon/Evoli.png")
+Evoli = Pokemon("Evoli", Normal, 24, 0, 1, [bodycheck, tackle], "graphics/Pokemon/Evoli.png",0)
 
 
 # --- Gegner erzeugen, angepasst an Evoli ---
@@ -299,15 +300,15 @@ def gegner_generieren(evoli_lvl):
     gegner_klasse = type(basis_gegner)
 
     gegner_attacken = [Attacke(atk.name, atk.schaden, atk.typ) for atk in basis_gegner.attacken]
-
+    gegner_money = 0
     gegner = gegner_klasse(
         basis_gegner.name,
         basis_gegner.typ,
         basis_gegner.maxkp,
         0,
         gegner_lvl,
-        gegner_attacken
-
+        gegner_attacken,
+        gegner_money
     )
 
 
@@ -362,6 +363,7 @@ while running:
                         Evoli.erhalte_ep(ep_tod_gegner)
                         Evoli.heilen()
                         gegner = gegner_generieren(Evoli.lvl)
+                        money =+ 100
                         break
                     else:
                         gegner_atk = random.choice(gegner.attacken)
