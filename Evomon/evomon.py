@@ -21,30 +21,36 @@ FENSTER_HOEHE = 720
 
 
 # Positioneneinstellungen
-spieler_pos_bild = (150, 200)  # links oben
-gegner_pos_bild = (730, 200)   # Rechts unten
+SPIELER_POS_BILD = (150, 200)  # links oben
+GEGNER_POS_BILD = (730, 200)   # Rechts unten
 HINTERGRUND_POS_BILD = (0,0)
+
 text_ausgabe_spiel_pos = (420, 700)
+event_text_ausgabe_spiel_pos = (420, 300)
 
-spieler_pos_text_oben = (spieler_pos_bild[0] + 0, spieler_pos_bild[1] - 24) #
-gegner_pos_text_oben = (gegner_pos_bild[0] + 0, gegner_pos_bild[1] - 24)
+spieler_pos_text_oben = (SPIELER_POS_BILD[0] + 0, SPIELER_POS_BILD[1] - 24) #
+gegner_pos_text_oben = (GEGNER_POS_BILD[0] + 0, GEGNER_POS_BILD[1] - 24)
 
-spieler_pos_kp_balken_x = spieler_pos_bild[0] + 0
-spieler_pos_kp_balken_y = spieler_pos_bild[1] + 0
+spieler_pos_kp_balken_x = SPIELER_POS_BILD[0] + 0
+spieler_pos_kp_balken_y = SPIELER_POS_BILD[1] + 0
 
-gegner_pos_kp_balken_x = gegner_pos_bild[0] + 0
-gegner_pos_kp_balken_y = gegner_pos_bild[1] + 0
+gegner_pos_kp_balken_x = GEGNER_POS_BILD[0] + 0
+gegner_pos_kp_balken_y = GEGNER_POS_BILD[1] + 0
 
 spieler_pos_text_kp = (spieler_pos_kp_balken_x, spieler_pos_kp_balken_y + 1)
 gegner_pos_text_kp = (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y + 1)
 
+
+
 liste_ausgabe_spiel = []
 KP_TOD_POKEMON = 0
 ep_tod_gegner= 40
-kp_balken_länge = 200
-kp_balken_breite = 15
-liste_level_unterschied_gegner = [-1, 0, 1]
-bild_pokemon_skalierung = (200, 200)
+KP_BALKEN_LÄNGE = 200
+KP_BALKEN_BREITE = 15
+LISTE_LEVEL_UNTERSCHIED_GEGNER = [-1, 0, 1,]
+BILD_POKEMON_SKALIERUNG = (200, 200)
+AUSGABE_SPIEL_LEERE_ZEILE = ""
+
 # Button
 # === Positionseinstellungen ===
 button_width = 238
@@ -76,6 +82,7 @@ pygame.display.set_caption("Evomon")                                # Name des F
 font_main = pygame.font.Font(None, 36)
 font_kp = pygame.font.Font(None, 22)
 font_text_ausgabe = pygame.font.Font(None, 19)         # Fenster für Textausgabe spieler
+font_event_window = pygame.font.Font(None, 40)
 
 # Hintergrundbild laden
 hintergrund_bild = pygame.image.load("graphics/Background/Background.png")
@@ -129,7 +136,7 @@ class Pokemon:
         self.entwickelt = False
 
         self.bilddatei = pygame.image.load(bilddatei)#.convert_alpha()
-        self.bilddatei = pygame.transform.scale(self.bilddatei, bild_pokemon_skalierung)
+        self.bilddatei = pygame.transform.scale(self.bilddatei, BILD_POKEMON_SKALIERUNG)
 
 
     def angreifen(self, ziel, Attacke):
@@ -212,7 +219,7 @@ class Pokemon:
 
         # Neues Bild laden
         self.bilddatei = pygame.image.load(daten["bild"])
-        self.bilddatei = pygame.transform.scale(self.bilddatei, bild_pokemon_skalierung)
+        self.bilddatei = pygame.transform.scale(self.bilddatei, BILD_POKEMON_SKALIERUNG)
         #self.bilddatei = pygame.transform.flip(self.bilddatei, True, False)  # Evoli schaut nach links
 
         self.entwickelt = True
@@ -298,7 +305,7 @@ Evoli = Pokemon("Evoli", Normal, 24, 0, 1, [bodycheck, tackle], "graphics/Pokemo
 # --- Gegner erzeugen, angepasst an Evoli ---
 def gegner_generieren(evoli_lvl):
     basis_gegner = random.choice(GEGNER_LISTE)
-    gegner_lvl = max(1, evoli_lvl + random.choice(liste_level_unterschied_gegner))
+    gegner_lvl = max(1, evoli_lvl + random.choice(LISTE_LEVEL_UNTERSCHIED_GEGNER))
 
     gegner_klasse = type(basis_gegner)
 
@@ -345,7 +352,7 @@ def add_message_text_ausgabe(inhalt_text_hinzufügen):
         liste_ausgabe_spiel.pop(0)
 
 
-def text_ausgabe():
+def text_ausgabe_game():
     liste_ausgabe_spiel_letzte_zeilen = liste_ausgabe_spiel[-3:]
 
     for i, zeile in enumerate(liste_ausgabe_spiel_letzte_zeilen):
@@ -354,25 +361,53 @@ def text_ausgabe():
 
 
 
+def kp_balken_text_bild__spieler__gegner_anzeigen():
+    # Textanzeige
+    spieler_text_oben = font_main.render(f"{Evoli.name} Lvl {Evoli.lvl}", True, "WHITE")
+    spieler_text_kp = font_kp.render(f"{Evoli.kp}/{Evoli.maxkp}", True, "BLACK")
+
+    gegner_text_oben = font_main.render(f"{gegner.name} Lvl {gegner.lvl}", True, "WHITE")
+    gegner_text_kp = font_kp.render(f"{gegner.kp}/{gegner.maxkp}", True, "BLACK")
+
+    screen.blit(spieler_text_oben, spieler_pos_text_oben)
+    screen.blit(gegner_text_oben, gegner_pos_text_oben)
+
+    # KP-Balken
+    pygame.draw.rect(screen, RED, (spieler_pos_kp_balken_x, spieler_pos_kp_balken_y, KP_BALKEN_LÄNGE, KP_BALKEN_BREITE))
+    pygame.draw.rect(screen, GREEN,(spieler_pos_kp_balken_x, spieler_pos_kp_balken_y, int(KP_BALKEN_LÄNGE * (Evoli.kp / Evoli.maxkp)),KP_BALKEN_BREITE))
+    pygame.draw.rect(screen, RED, (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y, KP_BALKEN_LÄNGE, KP_BALKEN_BREITE))
+    pygame.draw.rect(screen, GREEN,(gegner_pos_kp_balken_x, gegner_pos_kp_balken_y, int(KP_BALKEN_LÄNGE * (gegner.kp / gegner.maxkp)),KP_BALKEN_BREITE))
+
+    screen.blit(spieler_text_kp, spieler_pos_text_kp)
+    screen.blit(gegner_text_kp, gegner_pos_text_kp)
+
+    # Pokemon-Bilder anzeigen
+    screen.blit(Evoli.bilddatei, SPIELER_POS_BILD)
+    screen.blit(gegner.bilddatei, GEGNER_POS_BILD)
+
+
 # --- Kampfschleife ---
 gegner = gegner_generieren(Evoli.lvl)
 while running:
     # Bildhintergrund hinzufügen
     screen.blit(hintergrund_bild, HINTERGRUND_POS_BILD)
-    # Pokemon-Bilder anzeigen
-    screen.blit(Evoli.bilddatei, spieler_pos_bild)
-    screen.blit(gegner.bilddatei, gegner_pos_bild)
+
+    # text: Name Pokemon, lvl, kp, kp-balken von spieler und gegner
+    kp_balken_text_bild__spieler__gegner_anzeigen()
+    text_ausgabe_game()  # anzeige der letzten 3 geschehnisse
 
     mouse_pos = pygame.mouse.get_pos()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for i, rect in enumerate(button_rects):
                 if rect.collidepoint(mouse_pos):
                     atk = Evoli.attacken[i]
                     schaden, faktor = Evoli.angreifen(gegner, atk)
+
                     # Textausgabe schaden Spieler
                     inhalt_text_ausgabe_spiel_schaden_spieler = f"{Evoli.name} nutzt {atk.name}! ({schaden} Schaden)"
                     add_message_text_ausgabe(inhalt_text_ausgabe_spiel_schaden_spieler)
@@ -381,6 +416,7 @@ while running:
                     if gegner.kp <= KP_TOD_POKEMON:
                         # Textausgabe bei besigtem gegner
                         inhalt_text_ausgabe_spiel_besiegt_gegner = f"{gegner.name} wurde besiegt!"
+                        add_message_text_ausgabe(AUSGABE_SPIEL_LEERE_ZEILE)
                         add_message_text_ausgabe(inhalt_text_ausgabe_spiel_besiegt_gegner)
                         print(f"{gegner.name} wurde besiegt!")
 
@@ -394,33 +430,13 @@ while running:
                         # Schaden gegener Ausgabe
                         inhalt_text_ausgabe_spiel_schaden_gegner = f"{gegner.name} nutzt {gegner_atk.name}! ({schaden2} Schaden)"
                         add_message_text_ausgabe(inhalt_text_ausgabe_spiel_schaden_gegner)
+                        add_message_text_ausgabe(AUSGABE_SPIEL_LEERE_ZEILE)
                         print(f"{gegner.name} nutzt {gegner_atk.name}! ({schaden2} Schaden)")
 
                         if Evoli.kp <= KP_TOD_POKEMON:
                             print(f"💀 {Evoli.name} wurde besiegt! Spiel vorbei.")
                             running = False
 
-    # Textanzeige
-    spieler_text_oben = font_main.render(f"{Evoli.name} Lvl {Evoli.lvl}", True, "WHITE")
-    spieler_text_kp = font_kp.render(f"{Evoli.kp}/{Evoli.maxkp}", True, "BLACK")
-
-    gegner_text_oben = font_main.render(f"{gegner.name} Lvl {gegner.lvl}", True, "WHITE")
-    gegner_text_kp = font_kp.render(f"{gegner.kp}/{gegner.maxkp}", True, "BLACK")
-
-    screen.blit(spieler_text_oben, spieler_pos_text_oben)
-    screen.blit(gegner_text_oben,gegner_pos_text_oben)
-
-
-    # KP-Balken
-    pygame.draw.rect(screen, RED, (spieler_pos_kp_balken_x, spieler_pos_kp_balken_y, kp_balken_länge, kp_balken_breite))
-    pygame.draw.rect(screen, GREEN, (spieler_pos_kp_balken_x, spieler_pos_kp_balken_y, int(kp_balken_länge * (Evoli.kp / Evoli.maxkp)), kp_balken_breite))
-    pygame.draw.rect(screen, RED, (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y, kp_balken_länge, kp_balken_breite))
-    pygame.draw.rect(screen, GREEN, (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y, int(kp_balken_länge * (gegner.kp / gegner.maxkp)), kp_balken_breite))
-
-    screen.blit(spieler_text_kp, spieler_pos_text_kp)
-    screen.blit(gegner_text_kp, gegner_pos_text_kp)
-
-    text_ausgabe()  # anzeige der letzten 3 geschehnisse
 
     # --- Buttons für Attacken ---
     button_rects = []
