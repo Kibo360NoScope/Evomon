@@ -39,6 +39,8 @@ gegner_pos_text_kp = (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y + 1)
 
 kp_tod_pokemon = 0
 ep_tod_gegner= 40
+kp_balken_länge = 200
+kp_balken_breite = 15
 
 # Button
 # === Positionseinstellungen ===
@@ -56,8 +58,6 @@ links_unten_x = 21
 rechts_unten_x = 824
 
 # Farben
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
 LIGHT_GREY = (200, 200, 200)
 HOVER = (255, 220, 120)
 GREEN = (80, 200, 80)
@@ -331,13 +331,11 @@ def draw_button(screen, text, x, y, w, h, mouse_pos):
     color = HOVER if rect.collidepoint(mouse_pos) else LIGHT_GREY
     pygame.draw.rect(screen, color, rect, border_radius=8)
     pygame.draw.rect(screen, LIGHT_BLUE, rect, 2, border_radius=8)
-    txt = font_main.render(text, True, BLACK)
+    txt = font_main.render(text, True, "BLACK")
     screen.blit(txt, (x + (w - txt.get_width()) // 2, y + (h - txt.get_height()) // 1.7))
     return rect
 
 # --- Kampfschleife ---
-
-
 gegner = gegner_generieren(Evoli.lvl)
 while running:
     # Bildhintergrund hinzufügen
@@ -372,21 +370,21 @@ while running:
                             running = False
 
     # Textanzeige
-    spieler_text_oben = font_main.render(f"{Evoli.name} Lvl {Evoli.lvl}", True, WHITE)
-    spieler_text_kp = font_kp.render(f"{Evoli.kp}/{Evoli.maxkp}", True, BLACK)
+    spieler_text_oben = font_main.render(f"{Evoli.name} Lvl {Evoli.lvl}", True, "WHITE")
+    spieler_text_kp = font_kp.render(f"{Evoli.kp}/{Evoli.maxkp}", True, "BLACK")
 
-    gegner_text_oben = font_main.render(f"{gegner.name} Lvl {gegner.lvl}", True, WHITE)
-    gegner_text_kp = font_kp.render(f"{gegner.kp}/{gegner.maxkp}", True, BLACK)
+    gegner_text_oben = font_main.render(f"{gegner.name} Lvl {gegner.lvl}", True, "WHITE")
+    gegner_text_kp = font_kp.render(f"{gegner.kp}/{gegner.maxkp}", True, "BLACK")
 
     screen.blit(spieler_text_oben, spieler_pos_text_oben)
     screen.blit(gegner_text_oben,gegner_pos_text_oben)
 
 
     # KP-Balken
-    pygame.draw.rect(screen, RED, (spieler_pos_kp_balken_x, spieler_pos_kp_balken_y, 200, 15))
-    pygame.draw.rect(screen, GREEN, (spieler_pos_kp_balken_x, spieler_pos_kp_balken_y, int(200 * (Evoli.kp / Evoli.maxkp)), 15))
-    pygame.draw.rect(screen, RED, (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y, 200, 15))
-    pygame.draw.rect(screen, GREEN, (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y, int(200 * (gegner.kp / gegner.maxkp)), 15))
+    pygame.draw.rect(screen, RED, (spieler_pos_kp_balken_x, spieler_pos_kp_balken_y, kp_balken_länge, kp_balken_breite))
+    pygame.draw.rect(screen, GREEN, (spieler_pos_kp_balken_x, spieler_pos_kp_balken_y, int(kp_balken_länge * (Evoli.kp / Evoli.maxkp)), kp_balken_breite))
+    pygame.draw.rect(screen, RED, (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y, kp_balken_länge, kp_balken_breite))
+    pygame.draw.rect(screen, GREEN, (gegner_pos_kp_balken_x, gegner_pos_kp_balken_y, int(kp_balken_länge * (gegner.kp / gegner.maxkp)), kp_balken_breite))
 
     screen.blit(spieler_text_kp, spieler_pos_text_kp)
     screen.blit(gegner_text_kp, gegner_pos_text_kp)
