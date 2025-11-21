@@ -94,6 +94,9 @@ scaling_evolidmg = 1.12
 scaling_kp = 0.1
 scaling_enmydmg = 0.03
 
+#Erfahrung und Level für den Battle-Pass
+battle_pass_lvl = 1
+battle_pass_exp = 0
 
 def effekt_faktor(angreifer_typ, verteidiger_typ):
     code = effektiv[angreifer_typ][verteidiger_typ]
