@@ -41,7 +41,8 @@ kp_tod_pokemon = 0
 ep_tod_gegner= 40
 kp_balken_länge = 200
 kp_balken_breite = 15
-
+liste_level_unterschied_gegner = [-1, 0, 1]
+bild_pokemon_skalierung = (200, 200)
 # Button
 # === Positionseinstellungen ===
 button_width = 238
@@ -125,7 +126,7 @@ class Pokemon:
         self.entwickelt = False
 
         self.bilddatei = pygame.image.load(bilddatei)#.convert_alpha()
-        self.bilddatei = pygame.transform.scale(self.bilddatei, (200, 200))
+        self.bilddatei = pygame.transform.scale(self.bilddatei, bild_pokemon_skalierung)
 
 
     def angreifen(self, ziel, Attacke):
@@ -208,7 +209,7 @@ class Pokemon:
 
         # Neues Bild laden
         self.bilddatei = pygame.image.load(daten["bild"])
-        self.bilddatei = pygame.transform.scale(self.bilddatei, (200, 200))
+        self.bilddatei = pygame.transform.scale(self.bilddatei, bild_pokemon_skalierung)
         #self.bilddatei = pygame.transform.flip(self.bilddatei, True, False)  # Evoli schaut nach links
 
         self.entwickelt = True
@@ -294,7 +295,7 @@ Evoli = Pokemon("Evoli", Normal, 24, 0, 1, [bodycheck, tackle], "graphics/Pokemo
 # --- Gegner erzeugen, angepasst an Evoli ---
 def gegner_generieren(evoli_lvl):
     basis_gegner = random.choice(GEGNER_LISTE)
-    gegner_lvl = max(1, evoli_lvl + random.choice([-1, 0, 1]))
+    gegner_lvl = max(1, evoli_lvl + random.choice(liste_level_unterschied_gegner))
 
     gegner_klasse = type(basis_gegner)
 
