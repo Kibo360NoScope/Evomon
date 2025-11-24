@@ -24,9 +24,10 @@ FENSTER_HOEHE = 720
 SPIELER_POS_BILD = (150, 200)  # links oben
 GEGNER_POS_BILD = (730, 200)   # Rechts unten
 HINTERGRUND_POS_BILD = (0,0)
+EVENT_POS_BILD_WINDOW = (420, 300)
 
 text_ausgabe_spiel_pos = (420, 700)
-event_text_ausgabe_spiel_pos = (420, 300)
+event_text_ausgabe_spiel_pos = (EVENT_POS_BILD_WINDOW[0], EVENT_POS_BILD_WINDOW[1])
 
 spieler_pos_text_oben = (SPIELER_POS_BILD[0] + 0, SPIELER_POS_BILD[1] - 24) #
 gegner_pos_text_oben = (GEGNER_POS_BILD[0] + 0, GEGNER_POS_BILD[1] - 24)
@@ -50,6 +51,8 @@ KP_BALKEN_BREITE = 15
 LISTE_LEVEL_UNTERSCHIED_GEGNER = [-1, 0, 1,]
 BILD_POKEMON_SKALIERUNG = (200, 200)
 AUSGABE_SPIEL_LEERE_ZEILE = ""
+event_spieler_pokemon = False
+counter_time_pause = 0
 
 # Button
 # === Positionseinstellungen ===
@@ -87,6 +90,8 @@ font_event_window = pygame.font.Font(None, 40)
 # Hintergrundbild laden
 hintergrund_bild = pygame.image.load("graphics/Background/Background.png")
 hintergrund_bild = pygame.transform.scale(hintergrund_bild, (FENSTER_BREITE, FENSTER_HOEHE))
+event_bild_window = pygame.image.load("graphics/Background/Fenster_Event.png")
+event_bild_window = pygame.transform.scale(event_bild_window, EVENT_POS_BILD_WINDOW)
 
 # --- Effektivitätsmatrix ---
 effektiv = [
@@ -157,6 +162,10 @@ class Pokemon:
         self.maxkp += 2
         self.kp = self.maxkp
         print(f"⬆️ {self.name} erreicht Level {self.lvl}!")
+        global event_spieler_pokemon
+        event_spieler_pokemon = True
+
+
 
         # Attackenschaden leicht erhöhen
         for atk in self.attacken:
@@ -224,6 +233,8 @@ class Pokemon:
 
         self.entwickelt = True
         print(f"✨ Dein Evoli hat sich zu {self.name} entwickelt!")
+        global event_spieler_pokemon
+        event_spieler_pokemon = True
 
     def heilen(self):
         self.kp = self.maxkp
@@ -385,23 +396,41 @@ def kp_balken_text_bild__spieler__gegner_anzeigen():
     screen.blit(Evoli.bilddatei, SPIELER_POS_BILD)
     screen.blit(gegner.bilddatei, GEGNER_POS_BILD)
 
+def event_window_player():
+    event_evoli_lvl_up_text_inhalt = font_event_window.render(f"Hallo", True, "BLACK")
+    event_evoli_entwicklung_text_inhalt = font_event_window.render(f" Dein Evoli Entwickelt sich zu: {Evoli.name}", True, "BLACK")
+    screen.blit(event_bild_window, event_text_ausgabe_spiel_pos)
+    if Evoli.level_up:
+        screen.blit(event_evoli_lvl_up_text_inhalt, event_text_ausgabe_spiel_pos)
+    elif Evoli.entwickelt:
+        screen.blit(event_evoli_entwicklung_text_inhalt, event_text_ausgabe_spiel_pos)
+
 
 # --- Kampfschleife ---
 gegner = gegner_generieren(Evoli.lvl)
 while running:
+
     # Bildhintergrund hinzufügen
     screen.blit(hintergrund_bild, HINTERGRUND_POS_BILD)
 
-    # text: Name Pokemon, lvl, kp, kp-balken von spieler und gegner
-    kp_balken_text_bild__spieler__gegner_anzeigen()
     text_ausgabe_game()  # anzeige der letzten 3 geschehnisse
 
     mouse_pos = pygame.mouse.get_pos()
+    if event_spieler_pokemon == False:
+        # text: Name Pokemon, lvl, kp, kp-balken von spieler und gegner
+        kp_balken_text_bild__spieler__gegner_anzeigen()
+
+    elif event_spieler_pokemon == True:
+        event_window_player()
+        counter_time_pause += 1
+        print(counter_time_pause)
+    if counter_time_pause > 180:
+        event_spieler_pokemon = False
+        counter_time_pause = 0
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for i, rect in enumerate(button_rects):
                 if rect.collidepoint(mouse_pos):
@@ -409,15 +438,13 @@ while running:
                     schaden, faktor = Evoli.angreifen(gegner, atk)
 
                     # Textausgabe schaden Spieler
-                    inhalt_text_ausgabe_spiel_schaden_spieler = f"{Evoli.name} nutzt {atk.name}! ({schaden} Schaden)"
-                    add_message_text_ausgabe(inhalt_text_ausgabe_spiel_schaden_spieler)
+                    add_message_text_ausgabe(f"{Evoli.name} nutzt {atk.name}! ({schaden} Schaden)")
                     print(f"{Evoli.name} nutzt {atk.name}! ({schaden} Schaden)")
 
                     if gegner.kp <= KP_TOD_POKEMON:
                         # Textausgabe bei besigtem gegner
-                        inhalt_text_ausgabe_spiel_besiegt_gegner = f"{gegner.name} wurde besiegt!"
                         add_message_text_ausgabe(AUSGABE_SPIEL_LEERE_ZEILE)
-                        add_message_text_ausgabe(inhalt_text_ausgabe_spiel_besiegt_gegner)
+                        add_message_text_ausgabe(f"{gegner.name} wurde besiegt!")
                         print(f"{gegner.name} wurde besiegt!")
 
                         Evoli.erhalte_ep(ep_tod_gegner)
@@ -428,8 +455,7 @@ while running:
                         gegner_atk = random.choice(gegner.attacken)
                         schaden2, _ = gegner.angreifen(Evoli, gegner_atk)
                         # Schaden gegener Ausgabe
-                        inhalt_text_ausgabe_spiel_schaden_gegner = f"{gegner.name} nutzt {gegner_atk.name}! ({schaden2} Schaden)"
-                        add_message_text_ausgabe(inhalt_text_ausgabe_spiel_schaden_gegner)
+                        add_message_text_ausgabe(f"{gegner.name} nutzt {gegner_atk.name}! ({schaden2} Schaden)")
                         add_message_text_ausgabe(AUSGABE_SPIEL_LEERE_ZEILE)
                         print(f"{gegner.name} nutzt {gegner_atk.name}! ({schaden2} Schaden)")
 
