@@ -51,8 +51,11 @@ KP_BALKEN_BREITE = 15
 LISTE_LEVEL_UNTERSCHIED_GEGNER = [-1, 0, 1,]
 BILD_POKEMON_SKALIERUNG = (200, 200)
 AUSGABE_SPIEL_LEERE_ZEILE = ""
+
 event_spieler_pokemon = False
 counter_time_pause = 0
+count_time_pause_reset = 0
+dauer_event_spieler_pokemon_screen = 120
 
 # Button
 # === Positionseinstellungen ===
@@ -424,14 +427,14 @@ while running:
         event_window_player()
         counter_time_pause += 1
         print(counter_time_pause)
-    if counter_time_pause > 180:
+    if counter_time_pause > dauer_event_spieler_pokemon_screen:
         event_spieler_pokemon = False
-        counter_time_pause = 0
+        counter_time_pause = count_time_pause_reset
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and counter_time_pause == count_time_pause_reset:
             for i, rect in enumerate(button_rects):
                 if rect.collidepoint(mouse_pos):
                     atk = Evoli.attacken[i]
